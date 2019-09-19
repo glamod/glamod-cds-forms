@@ -1,0 +1,303 @@
+<html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+
+<div id="main_section">
+
+<h1>Download data: In situ sub-daily surface marine observations from 1946</h1>
+
+<div class="abox">
+ <div class="atitle">Query type <span title="Selecting this will constrain the spatial and temporal selections below"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Selecting this will constrain the spatial and temporal selections below</span></div>
+ <div class="note">Defines which constraints spatial and temporal constraints will be applied to the query</div>
+ <div class="howmany">Please select: 1</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >Small location query (over time series)</input><br />
+  <input type="checkbox" class="acheckbox" >Bounding box query (limited times)</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Bounding box <span title="Selecting some areas of the globe will generate an empty result set"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Selecting some areas of the globe will generate an empty result set</span></div>
+ <div class="note">Defines a spatial domain in which to select data. ONLY AVAILABLE IF Query Type is a Bounding Box.</div>
+ <div class="howmany">Please select: a valid domain</div>
+ <div class="padmid"><input type="text" size="7" value="90.0" /> N</div> <div>
+   <span class="padleft"><input type="text" size="7" value="-180.0" /> W</span>
+   <span class="padright"><input type="text" size="7" value="180.0" /> E</span>
+ </div>
+ <div class="padmid"><input type="text" size="7" value="-90.0" /> S</div> <div class="aselectall"><a href="#">Reset bounding box</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Location <span title="Select a location and the tool will find all observations within the 1&deg; x 1&deg; polygon around that point for time series selected"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Select a location and the tool will find all observations within the 1&deg; x 1&deg; polygon around that point for time series selected</span></div>
+ <div class="note">Defines the centre of a 1&deg; x 1&deg; polygon in which to search for marinedata. ONLY AVAILABLE IF Query Type is a Location.</div>
+ <div class="howmany">Please select: a valid location</div>
+ <div>
+   <span class="padleft"><input type="text" size="7" value="0.0" /> N</span>
+   <span class="padmid"><input type="text" size="7" value="0.0" /> E</span>
+ </div> <div class="aselectall"><a href="#">Reset location</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Variable <span title="You can select as many variables as you like"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">You can select as many variables as you like</span></div>
+ <div class="note">The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat</div>
+ <div class="howmany">Please select: at least 1 option</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >Air temperature [K]</input><br />
+  <input type="checkbox" class="acheckbox" >Wet bulb temperature [K]</input><br />
+  <input type="checkbox" class="acheckbox" >Water temperature (sea surface temperature) [K]</input><br />
+  <input type="checkbox" class="acheckbox" >Air pressure [Pa]</input><br />
+  <input type="checkbox" class="acheckbox" >Air pressure at sea level [Pa]</input><br />
+  <input type="checkbox" class="acheckbox" >Wind from direction [degrees true]</input><br />
+  <input type="checkbox" class="acheckbox" >Wind speed [m s^-1]</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Station type <span title="Select the option"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Select the option</span></div>
+ <div class="note">The type of station recording the observation</div>
+ <div class="howmany">Please select: 1</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" checked=checked>Sea stations</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Platform type <span title="Select one or more options"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Select one or more options</span></div>
+ <div class="note">The type of platform where the measurements were made</div>
+ <div class="howmany">Please select: at least 1 option</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >Ship</input><br />
+  <input type="checkbox" class="acheckbox" >Drifting buoy</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Year <span title="Selections depend on whether you have selected a single location or bounding box"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Selections depend on whether you have selected a single location or bounding box</span></div>
+ <div class="note">More data will be available in recent years.</div>
+ <div class="howmany">Please select: at least 1 option</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >1946</input>
+  <input type="checkbox" class="acheckbox" >1947</input>
+  <input type="checkbox" class="acheckbox" >1948</input>
+  <input type="checkbox" class="acheckbox" >1949</input>
+  <input type="checkbox" class="acheckbox" >1950</input>
+  <input type="checkbox" class="acheckbox" >1951</input>
+  <input type="checkbox" class="acheckbox" >1952</input>
+  <input type="checkbox" class="acheckbox" >1953</input>
+  <input type="checkbox" class="acheckbox" >1954</input>
+  <input type="checkbox" class="acheckbox" >1955</input>
+  <input type="checkbox" class="acheckbox" >1956</input>
+  <input type="checkbox" class="acheckbox" >1957</input>
+  <input type="checkbox" class="acheckbox" >1958</input>
+  <input type="checkbox" class="acheckbox" >1959</input>
+  <input type="checkbox" class="acheckbox" >1960</input>
+  <input type="checkbox" class="acheckbox" >1961</input>
+  <input type="checkbox" class="acheckbox" >1962</input>
+  <input type="checkbox" class="acheckbox" >1963</input>
+  <input type="checkbox" class="acheckbox" >1964</input>
+  <input type="checkbox" class="acheckbox" >1965</input>
+  <input type="checkbox" class="acheckbox" >1966</input>
+  <input type="checkbox" class="acheckbox" >1967</input>
+  <input type="checkbox" class="acheckbox" >1968</input>
+  <input type="checkbox" class="acheckbox" >1969</input>
+  <input type="checkbox" class="acheckbox" >1970</input>
+  <input type="checkbox" class="acheckbox" >1971</input>
+  <input type="checkbox" class="acheckbox" >1972</input>
+  <input type="checkbox" class="acheckbox" >1973</input>
+  <input type="checkbox" class="acheckbox" >1974</input>
+  <input type="checkbox" class="acheckbox" >1975</input>
+  <input type="checkbox" class="acheckbox" >1976</input>
+  <input type="checkbox" class="acheckbox" >1977</input>
+  <input type="checkbox" class="acheckbox" >1978</input>
+  <input type="checkbox" class="acheckbox" >1979</input>
+  <input type="checkbox" class="acheckbox" >1980</input>
+  <input type="checkbox" class="acheckbox" >1981</input>
+  <input type="checkbox" class="acheckbox" >1982</input>
+  <input type="checkbox" class="acheckbox" >1983</input>
+  <input type="checkbox" class="acheckbox" >1984</input>
+  <input type="checkbox" class="acheckbox" >1985</input>
+  <input type="checkbox" class="acheckbox" >1986</input>
+  <input type="checkbox" class="acheckbox" >1987</input>
+  <input type="checkbox" class="acheckbox" >1988</input>
+  <input type="checkbox" class="acheckbox" >1989</input>
+  <input type="checkbox" class="acheckbox" >1990</input>
+  <input type="checkbox" class="acheckbox" >1991</input>
+  <input type="checkbox" class="acheckbox" >1992</input>
+  <input type="checkbox" class="acheckbox" >1993</input>
+  <input type="checkbox" class="acheckbox" >1994</input>
+  <input type="checkbox" class="acheckbox" >1995</input>
+  <input type="checkbox" class="acheckbox" >1996</input>
+  <input type="checkbox" class="acheckbox" >1997</input>
+  <input type="checkbox" class="acheckbox" >1998</input>
+  <input type="checkbox" class="acheckbox" >1999</input>
+  <input type="checkbox" class="acheckbox" >2000</input>
+  <input type="checkbox" class="acheckbox" >2001</input>
+  <input type="checkbox" class="acheckbox" >2002</input>
+  <input type="checkbox" class="acheckbox" >2003</input>
+  <input type="checkbox" class="acheckbox" >2004</input>
+  <input type="checkbox" class="acheckbox" >2005</input>
+  <input type="checkbox" class="acheckbox" >2006</input>
+  <input type="checkbox" class="acheckbox" >2007</input>
+  <input type="checkbox" class="acheckbox" >2008</input>
+  <input type="checkbox" class="acheckbox" >2009</input>
+  <input type="checkbox" class="acheckbox" >2010</input>
+  <input type="checkbox" class="acheckbox" >2011</input>
+  <input type="checkbox" class="acheckbox" >2012</input>
+  <input type="checkbox" class="acheckbox" >2013</input>
+  <input type="checkbox" class="acheckbox" >2014</input>
+  <input type="checkbox" class="acheckbox" >2015</input>
+  <input type="checkbox" class="acheckbox" >2016</input>
+  <input type="checkbox" class="acheckbox" >2017</input>
+  <input type="checkbox" class="acheckbox" >2018</input>
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Month <span title="Months required"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Months required</span></div>
+ <div class="note">Months that you require</div>
+ <div class="howmany">Please select: at least 1 option</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >Jan</input>
+  <input type="checkbox" class="acheckbox" >Feb</input>
+  <input type="checkbox" class="acheckbox" >Mar</input>
+  <input type="checkbox" class="acheckbox" >Apr</input>
+  <input type="checkbox" class="acheckbox" >May</input>
+  <input type="checkbox" class="acheckbox" >Jun</input>
+  <input type="checkbox" class="acheckbox" >Jul</input>
+  <input type="checkbox" class="acheckbox" >Aug</input>
+  <input type="checkbox" class="acheckbox" >Sep</input>
+  <input type="checkbox" class="acheckbox" >Oct</input>
+  <input type="checkbox" class="acheckbox" >Nov</input>
+  <input type="checkbox" class="acheckbox" >Dec</input>
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Day <span title="Days required"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Days required</span></div>
+ <div class="note">Days that you require</div>
+ <div class="howmany">Please select: at least 1 option</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >01</input>
+  <input type="checkbox" class="acheckbox" >02</input>
+  <input type="checkbox" class="acheckbox" >03</input>
+  <input type="checkbox" class="acheckbox" >04</input>
+  <input type="checkbox" class="acheckbox" >05</input>
+  <input type="checkbox" class="acheckbox" >06</input>
+  <input type="checkbox" class="acheckbox" >07</input>
+  <input type="checkbox" class="acheckbox" >08</input>
+  <input type="checkbox" class="acheckbox" >09</input>
+  <input type="checkbox" class="acheckbox" >10</input>
+  <input type="checkbox" class="acheckbox" >11</input>
+  <input type="checkbox" class="acheckbox" >12</input>
+  <input type="checkbox" class="acheckbox" >13</input>
+  <input type="checkbox" class="acheckbox" >14</input>
+  <input type="checkbox" class="acheckbox" >15</input>
+  <input type="checkbox" class="acheckbox" >16</input>
+  <input type="checkbox" class="acheckbox" >17</input>
+  <input type="checkbox" class="acheckbox" >18</input>
+  <input type="checkbox" class="acheckbox" >19</input>
+  <input type="checkbox" class="acheckbox" >20</input>
+  <input type="checkbox" class="acheckbox" >21</input>
+  <input type="checkbox" class="acheckbox" >22</input>
+  <input type="checkbox" class="acheckbox" >23</input>
+  <input type="checkbox" class="acheckbox" >24</input>
+  <input type="checkbox" class="acheckbox" >25</input>
+  <input type="checkbox" class="acheckbox" >26</input>
+  <input type="checkbox" class="acheckbox" >27</input>
+  <input type="checkbox" class="acheckbox" >28</input>
+  <input type="checkbox" class="acheckbox" >29</input>
+  <input type="checkbox" class="acheckbox" >30</input>
+  <input type="checkbox" class="acheckbox" >31</input>
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Hour <span title="Hours required"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Hours required</span></div>
+ <div class="note">Hours that you require</div>
+ <div class="howmany">Please select: at least 1 option</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >00</input>
+  <input type="checkbox" class="acheckbox" >01</input>
+  <input type="checkbox" class="acheckbox" >02</input>
+  <input type="checkbox" class="acheckbox" >03</input>
+  <input type="checkbox" class="acheckbox" >04</input>
+  <input type="checkbox" class="acheckbox" >05</input>
+  <input type="checkbox" class="acheckbox" >06</input>
+  <input type="checkbox" class="acheckbox" >07</input>
+  <input type="checkbox" class="acheckbox" >08</input>
+  <input type="checkbox" class="acheckbox" >09</input>
+  <input type="checkbox" class="acheckbox" >10</input>
+  <input type="checkbox" class="acheckbox" >11</input>
+  <input type="checkbox" class="acheckbox" >12</input>
+  <input type="checkbox" class="acheckbox" >13</input>
+  <input type="checkbox" class="acheckbox" >14</input>
+  <input type="checkbox" class="acheckbox" >15</input>
+  <input type="checkbox" class="acheckbox" >16</input>
+  <input type="checkbox" class="acheckbox" >17</input>
+  <input type="checkbox" class="acheckbox" >18</input>
+  <input type="checkbox" class="acheckbox" >19</input>
+  <input type="checkbox" class="acheckbox" >20</input>
+  <input type="checkbox" class="acheckbox" >21</input>
+  <input type="checkbox" class="acheckbox" >22</input>
+  <input type="checkbox" class="acheckbox" >23</input>
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Intended use <span title="Selecting this will reduce the number of observations available, due to usage restrictions"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Selecting this will reduce the number of observations available, due to usage restrictions</span></div>
+ <div class="note">How you intend to use the data</div>
+ <div class="howmany">Please select: 1</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" checked=checked>Non-commercial</input><br />
+  <input type="checkbox" class="acheckbox" >Commercial&nbsp;&nbsp;&nbsp;&nbsp;</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Data Quality <span title="Selecting &quot;Quality controlled&quot; will only return observations that have passed a certain level of QC (e.g. World Weather Record checks)."><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Selecting &quot;Quality controlled&quot; will only return observations that have passed a certain level of QC (e.g. World Weather Record checks).</span></div>
+ <div class="note">Quality control level required</div>
+ <div class="howmany">Please select: 1</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" checked=checked>Quality controlled</input><br />
+  <input type="checkbox" class="acheckbox" >All data</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Variable group options <span title="Choose to only get a response if all selected variables are available"><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Choose to only get a response if all selected variables are available</span></div>
+ <div class="note">Choose to only get a response if all selected variables are available    </div>
+ <div class="howmany">Please select: 1</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >Run extraction for any variables that are found</input><br />
+  <input type="checkbox" class="acheckbox" >Only run extraction if all selected variables are available for domain requested</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+<div class="abox">
+ <div class="atitle">Format <span title="Zipped outputs will be smaller in volume, they may contain multiple data files."><img class="atooltip" src="tooltip_icon.png" /></span><span class="smalltext">Zipped outputs will be smaller in volume, they may contain multiple data files.</span></div>
+ <div class="note">Data format</div>
+ <div class="howmany">Please select: 1</div>
+ <div class="aselector">
+  <input type="checkbox" class="acheckbox" >CSV</input><br />
+  <input type="checkbox" class="acheckbox" >CSV (zipped)&nbsp;</input><br />
+  <input type="checkbox" class="acheckbox" >JSON</input><br />
+  <input type="checkbox" class="acheckbox" >JSON (zipped)</input><br />
+ </div>
+ <div class="aselectall"><a href="#">Clear</a></div>
+</div>
+
+
+<br />
+<button class="mainbutton showapibutton">Show API Request</button>
+<button class="mainbutton submitbutton">Submit Form</button>
+
+</div>
+
+<div>
+<br />&nbsp;
+</div>
+
+</body>
+</html>
