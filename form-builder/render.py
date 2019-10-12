@@ -10,7 +10,8 @@ def render_page(out_file, title, body, template="template.html"):
 
 
 class Section(object):
-    def __init__(self, title, note, tooltip, labels=None, n=1, select_all=False, default=None, widget=None):
+    def __init__(self, title, note, tooltip, labels=None, n=1, select_all=False, default=None, widget=None,
+                 subsections=None):
         self.title = title
         self.note = note
         self.tooltip = tooltip
@@ -20,20 +21,29 @@ class Section(object):
         self.select_all = select_all
         self.default = default
         self.widget = widget
+        
+        self.subsections = subsections
 
     def _common(self):
 
         content = ""
-
+        ss = self.subsections
+        
         if self.n == 1:
             n_string = self.n
         else:
             n_string = "at least 1 option"
+            self.select_all = True
 
         content += f' <div class="howmany">Please select: {n_string}</div>\n'
         content += ' <div class="aselector">\n'
 
-        for label in self.labels:
+        for count, label in enumerate(self.labels):
+        
+            if ss and count in ss:
+                value = ss[count]
+                content += f'  <div><img class="smallicon" src="arrow.png" /> <b>{value}</b></div>'
+                
             if self.default == label:
                 checked = "checked=checked"
             else:
@@ -100,7 +110,7 @@ class Section(object):
     def render(self):
         body = '<div class="abox">\n'
         body += f' <div class="atitle">{self.title} <span title="{self.tooltip}">'
-        body += f'<img class="atooltip" src="tooltip_icon.png" /></span>'
+        body += f'<img class="smallicon" src="tooltip_icon.png" /></span>'
         body += f'<span class="smalltext">{self.tooltip}</span></div>\n'
 
         body += f' <div class="note">{self.note}</div>\n'
@@ -153,6 +163,7 @@ def mockup_land():
     )
     body += section.render()
 
+    """
     # Query type
     options = [
         "Single location query (over time series)",
@@ -166,18 +177,19 @@ def mockup_land():
         labels,
     )
     body += section.render()
+"""
 
     # Bounding Box
     section = Section(
         "Bounding box",
         "Defines a spatial domain in which to select data. "
-        "ONLY AVAILABLE IF Query Type is a Bounding Box.",
+        "Selecting a large area will reduce the available time range that you can select. ",
         "Selecting some areas of the globe will generate an empty result set",
         widget="bbox",
     )
     body += section.render()
 
-    # Location
+    """# Location
     section = Section(
         "Location",
         "Defines a single location for which to select data. "
@@ -186,30 +198,59 @@ def mockup_land():
         widget="location",
     )
     body += section.render()
+"""
 
     # Variable
-    options = [
-        "Air temperature [K]",
-        "Daily maximum air temperature [K]",
-        "Daily minimum air temperature [K]",
-        "Accumulated precipitation [mm]",
-    ]
+    options = """
+Monthly maximum air temperature [K]
+Monthly minimum air temperature [K]
+Monthly mean air temperature [K]
+Daily maximum air temperature [K]
+Daily minimum air temperature [K]
+Daily mean air temperature [K]
+Daily Dew point temperature [K]
+Daily Accumulated precipitation [mm]
+Daily Fresh snow [mm]
+Daily Snow depth [cm]
+Daily Snow water equivalent [mm]
+Daily Surface air pressure at sea level [Pa]
+Daily Surface air pressure at specified height [Pa]
+Daily Wind speed [m s-1]
+Sub-daily Air temperature [K]
+Sub-daily Dew point temperature [K]
+Sub-daily Dew point temperature [K]
+Sub-daily Fresh snow [mm]
+Sub-daily Snow depth [cm]
+Sub-daily Snow water equivalent [mm]
+Sub-daily Surface air pressure at sea level [Pa]
+Sub-daily Surface air pressure at specified height [Pa]
+Sub-daily Wind speed [m s-1]
+Sub-daily wind from direction [degree]
+""".strip().split('\n')
+
     labels = format_strings(options)
+    subsections = {0: 'Monthly variables - available if time frequency is: <b>Monthly</b>', 
+                   3: 'Daily variables - available if time frequency is: <b>Daily</b>', 
+                   14: 'Sub-daily variables - available if time frequency is: <b>Sub-daily</b>'}
+    
+    note = "NOTE: The outputs will only include variables found within the domain specified in the request."    
     section = Section(
         "Variable",
-        "The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat",
-        "You can select as many variables as you like",
+        "The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat. " + note,
+        "You can select as many variables as you like (at the selected time frequency)",
         labels,
-        n="+",
+        n="+", subsections=subsections
     )
     body += section.render()
 
     # Year
-    options = [str(year) for year in range(1800, 2019)]
+    options = ['1761-1790', '1791-1820', '1821-1850', '1851-1880', '1881-1910']
+    options += [str(year) for year in range(1911, 2019)]
     labels = format_strings(options)
     section = Section(
         "Year",
-        "More data will be available in recent years.",
+        "Historical data can be selected in larger chunks because "
+        "more data will be available in recent years.",
         "Selections depend on whether you have selected a single location or bounding box",
         labels,
         n="+",
@@ -259,30 +300,32 @@ def mockup_land():
     )
     body += section.render()
 
-    # Variable group options
+    # Partial record options
+    default = "Only download records where all chosen variables are available"
     options = [
-        "Run extraction for any variables that are found",
-        "Only run extraction if all selected variables are available for domain requested",
+        default,
+        "Download all records where one or more of the chosen varaibles is available",
     ]
     labels = format_strings(options)
+    text = "Decide whether to receive records at time steps when all your chosen variables are not available"
     section = Section(
-        "Variable group options",
-        "Choose to only get a response if all selected variables are available    ",
-        "Choose to only get a response if all selected variables are available",
+        "Select full or partial records",
+        text,
+        text,
         labels,
-        default="Run extraction for any variables that are found",
+        default=labels[0]
     )
     body += section.render()
 
     # Format
-    options = ["CSV", "CSV (zipped)", "JSON", "JSON (zipped)"]
+    options = ["CSV (zipped)", "JSON (zipped)"]
     labels = format_strings(options)
     section = Section(
         "Format",
         "Data format",
         "Zipped outputs will be smaller in volume, they may contain multiple data files.",
         labels,
-        default="CSV",
+        default=labels[0],
     )
     body += section.render()
 
@@ -293,7 +336,7 @@ def mockup_marine():
     body = ""
     title = "Download data: In situ sub-daily surface marine observations from 1946"
 
-    # Query type
+    """# Query type
     options = [
         "Small location query (over time series)",
         "Bounding box query (limited times)",
@@ -306,18 +349,18 @@ def mockup_marine():
         labels,
     )
     body += section.render()
-
+"""
     # Bounding Box
     section = Section(
         "Bounding box",
         "Defines a spatial domain in which to select data. "
-        "ONLY AVAILABLE IF Query Type is a Bounding Box.",
+        "Selecting a large area will reduce the available time range that you can select. ",
         "Selecting some areas of the globe will generate an empty result set",
         widget="bbox",
     )
     body += section.render()
 
-    # Location
+    """# Location
     section = Section(
         "Location",
         "Defines the centre of a 1&deg; x 1&deg; polygon in which to search for marinedata. "
@@ -326,7 +369,7 @@ def mockup_marine():
         widget="location",
     )
     body += section.render()
-
+"""
     # Variable
     options = [
         "Air temperature [K]",
@@ -338,10 +381,11 @@ def mockup_marine():
         "Wind speed [m s^-1]",
     ]
     labels = format_strings(options)
+    note = "NOTE: The outputs will only include variables found within the domain specified in the request."
     section = Section(
         "Variable",
-        "The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat",
-        "You can select as many variables as you like",
+        "The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat. " + note,
+        "You can select as many variables as you like (for a single time period)",
         labels,
         n="+",
     )
@@ -355,7 +399,7 @@ def mockup_marine():
         "The type of station recording the observation",
         "Select the option",
         labels,
-        default="Sea stations",
+        default=labels[0],
     )
     body += section.render()
 
@@ -410,7 +454,7 @@ def mockup_marine():
         "How you intend to use the data",
         "Selecting this will reduce the number of observations available, due to usage restrictions",
         labels,
-        default="Non-commercial",
+        default=labels[0],
     )
     body += section.render()
 
@@ -422,34 +466,36 @@ def mockup_marine():
         "Quality control level required",
         "Selecting &quot;Quality controlled&quot; will only return observations that have passed a certain level of QC (e.g. World Weather Record checks).",
         labels,
-        default="Quality controlled",
+        default=labels[0],
     )
     body += section.render()
 
-    # Variable group options
+    # Partial record options
+    default = "Only download records where all chosen variables are available"
     options = [
-        "Run extraction for any variables that are found",
-        "Only run extraction if all selected variables are available for domain requested",
+        default,
+        "Download all records where one or more of the chosen varaibles is available",
     ]
     labels = format_strings(options)
+    text = "Decide whether to receive records at time steps when all your chosen variables are not available"
     section = Section(
-        "Variable group options",
-        "Choose to only get a response if all selected variables are available    ",
-        "Choose to only get a response if all selected variables are available",
+        "Select full or partial records",
+        text,
+        text,
         labels,
-        default="Run extraction for any variables that are found",
+        default=labels[0]
     )
     body += section.render()
 
     # Format
-    options = ["CSV", "CSV (zipped)", "JSON", "JSON (zipped)"]
+    options = ["CSV (zipped)", "JSON (zipped)"]
     labels = format_strings(options)
     section = Section(
         "Format",
         "Data format",
         "Zipped outputs will be smaller in volume, they may contain multiple data files.",
         labels,
-        default="CSV",
+        default=labels[0],
     )
     body += section.render()
 
