@@ -149,7 +149,7 @@ def main():
 def mockup_land():
     body = ""
     title = (
-        "Download data: Surface land meteorological station holdings from 1800 onward"
+        "Download data: Surface land meteorological station holdings"
     )
 
     # Time frequency
@@ -236,8 +236,8 @@ Sub-daily wind from direction [degree]
     note = "NOTE: The outputs will only include variables found within the domain specified in the request."    
     section = Section(
         "Variable",
-        "The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat. " + note,
-        "You can select as many variables as you like (at the selected time frequency)",
+        "Select one or more of the available variables of interest",
+        "You can select as many variables as you like",
         labels,
         n="+", subsections=subsections
     )
@@ -251,7 +251,7 @@ Sub-daily wind from direction [degree]
         "Year",
         "Historical data can be selected in larger chunks because "
         "more data will be available in recent years.",
-        "Selections depend on whether you have selected a single location or bounding box",
+        "Select one or more options",
         labels,
         n="+",
     )
@@ -384,14 +384,14 @@ def mockup_marine():
     note = "NOTE: The outputs will only include variables found within the domain specified in the request."
     section = Section(
         "Variable",
-        "The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat. " + note,
-        "You can select as many variables as you like (for a single time period)",
+        "Select one or more of the available variables of interest",
+        "You can select as many variables as you like",
         labels,
         n="+",
     )
     body += section.render()
 
-    # Station type
+    """# Station type
     options = ["Sea stations"]
     labels = format_strings(options)
     section = Section(
@@ -402,13 +402,13 @@ def mockup_marine():
         default=labels[0],
     )
     body += section.render()
-
+"""
     # Platform type
     options = ["Ship", "Drifting buoy"]
     labels = format_strings(options)
     section = Section(
         "Platform type",
-        "The type of platform where the measurements were made",
+        "The type of platform from which the measurements were made",
         "Select one or more options",
         labels,
         n="+",
@@ -421,7 +421,7 @@ def mockup_marine():
     section = Section(
         "Year",
         "More data will be available in recent years.",
-        "Selections depend on whether you have selected a single location or bounding box",
+        "Select one or more options",
         labels,
         n="+",
     )
@@ -447,7 +447,7 @@ def mockup_marine():
     section = Section("Hour", "Hours that you require", "Hours required", labels, n="+")
     body += section.render()
 
-    # Intended use
+    """# Intended use
     labels = format_strings(["Non-commercial", "Commercial"])
     section = Section(
         "Intended use",
@@ -457,7 +457,7 @@ def mockup_marine():
         default=labels[0],
     )
     body += section.render()
-
+"""
     # Data Quality
     options = ["Quality controlled", "All data"]
     labels = format_strings(options)

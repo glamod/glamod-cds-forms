@@ -21,8 +21,8 @@
  <div class="padmid"><input type="text" size="7" value="-90.0" /> S</div> <div class="aselectall"><a href="#">Reset bounding box</a></div>
 </div>
 <div class="abox">
- <div class="atitle">Variable <span title="You can select as many variables as you like (for a single time period)"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">You can select as many variables as you like (for a single time period)</span></div>
- <div class="note">The observed variable: https://github.com/glamod/common_data_model/blob/master/tables/observed_variable.dat. NOTE: The outputs will only include variables found within the domain specified in the request.</div>
+ <div class="atitle">Variable <span title="You can select as many variables as you like"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">You can select as many variables as you like</span></div>
+ <div class="note">Select one or more of the available variables of interest</div>
  <div class="howmany">Please select: at least 1 option</div>
  <div class="aselector">
   <input type="checkbox" class="acheckbox" >Air temperature [K]</input><br />
@@ -36,17 +36,8 @@
  <div class="aselectall"><a href="#">Select all</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">Clear all</a></div>
 </div>
 <div class="abox">
- <div class="atitle">Station type <span title="Select the option"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">Select the option</span></div>
- <div class="note">The type of station recording the observation</div>
- <div class="howmany">Please select: 1</div>
- <div class="aselector">
-  <input type="checkbox" class="acheckbox" checked=checked>Sea stations</input><br />
- </div>
- <div class="aselectall"><a href="#">Clear</a></div>
-</div>
-<div class="abox">
  <div class="atitle">Platform type <span title="Select one or more options"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">Select one or more options</span></div>
- <div class="note">The type of platform where the measurements were made</div>
+ <div class="note">The type of platform from which the measurements were made</div>
  <div class="howmany">Please select: at least 1 option</div>
  <div class="aselector">
   <input type="checkbox" class="acheckbox" >Ship</input><br />
@@ -55,7 +46,7 @@
  <div class="aselectall"><a href="#">Select all</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">Clear all</a></div>
 </div>
 <div class="abox">
- <div class="atitle">Year <span title="Selections depend on whether you have selected a single location or bounding box"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">Selections depend on whether you have selected a single location or bounding box</span></div>
+ <div class="atitle">Year <span title="Select one or more options"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">Select one or more options</span></div>
  <div class="note">More data will be available in recent years.</div>
  <div class="howmany">Please select: at least 1 option</div>
  <div class="aselector">
@@ -225,16 +216,6 @@
   <input type="checkbox" class="acheckbox" >23</input>
  </div>
  <div class="aselectall"><a href="#">Select all</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">Clear all</a></div>
-</div>
-<div class="abox">
- <div class="atitle">Intended use <span title="Selecting this will reduce the number of observations available, due to usage restrictions"><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">Selecting this will reduce the number of observations available, due to usage restrictions</span></div>
- <div class="note">How you intend to use the data</div>
- <div class="howmany">Please select: 1</div>
- <div class="aselector">
-  <input type="checkbox" class="acheckbox" checked=checked>Non-commercial</input><br />
-  <input type="checkbox" class="acheckbox" >Commercial&nbsp;&nbsp;&nbsp;&nbsp;</input><br />
- </div>
- <div class="aselectall"><a href="#">Clear</a></div>
 </div>
 <div class="abox">
  <div class="atitle">Data Quality <span title="Selecting &quot;Quality controlled&quot; will only return observations that have passed a certain level of QC (e.g. World Weather Record checks)."><img class="smallicon" src="tooltip_icon.png" /></span><span class="smalltext">Selecting &quot;Quality controlled&quot; will only return observations that have passed a certain level of QC (e.g. World Weather Record checks).</span></div>
