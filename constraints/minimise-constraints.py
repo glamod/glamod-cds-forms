@@ -1,9 +1,11 @@
 from itertools import permutations
+import argparse
 import copy
 import sys
 import json
 
 VERBOSE = True
+VERBOSE = False
 
 DATA = """
 name	home	age	team	midname
@@ -18,26 +20,55 @@ bryn	exmouth	young	spurs	mary
 """.strip().split('\n')
 
 
-def parse(fpath):
+def split_line(line, delimiter=','):
+    if not delimiter:
+        # I.e. None, i.e. white space
+        resp = line.strip().split(delimiter)
+    else:
+        resp = line.strip().replace(' ', '').replace('\t', '').split(delimiter)
+    
+    return resp
+ 
+
+def parse_input(fpath, remove_zero_counts=True, delimiter=','):
 
     with open(fpath) as reader: 
         data = reader.read().strip().split('\n')
 
-    columns = data[0].split()
+    print(f'[INFO] Read in {len(data) - 1} lines.')
+
+    columns = split_line(data[0], delimiter)
+ 
+    if remove_zero_counts: 
+        count_column = columns.index('count')
+
     records = []
 
+
     for items in sorted(data[1:]):
-        items = items.split()
+        items = split_line(items, delimiter)
+
+        if remove_zero_counts and int(items[count_column]) == 0:
+            continue
+
         records.append({})
 
         for i in range(len(items)):
             key = columns[i]
+
             if key == 'domain': 
                 continue
+
+            if remove_zero_counts and key == 'count':
+                continue
+
             records[-1][key] = items[i]
 
     if 'domain' in columns:
         columns.remove('domain')
+
+    if remove_zero_counts and 'count' in columns:
+        columns.remove('count')
 
     print(f'[INFO] Parsed {len(records)} records.')
     return columns, records
@@ -76,8 +107,6 @@ def generate_constraints(key_order, records):
 
             values.append([value])
 
-#        if ['36'] in values: print(str(extend), ':', values)
-
         if extend:
             constraints[-1][key_order[-1]].append(value)
 
@@ -112,7 +141,7 @@ def minimise(columns, records):
             if VERBOSE:
                 for con in constraints: 
                     if ['36'] in con.values():
-                        print(con)
+                        print(f'[DEBUG] Logging presence of variable "36"')
 
             print(f'[INFO] Length: {len(constraints)} for {key_order}')
 
@@ -199,16 +228,38 @@ def decode_records(c):
     return n 
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-v', '--verbose', type=bool, default=False,
+                        required=False, help='Verbose mode')
+    parser.add_argument('-d', '--delimiter', nargs=1, type=str, default=',',
+                        required=False, help='Delimiter')
+    parser.add_argument('-z', '--remove-zero-counts', type=bool, default=True,
+                        required=False, help='Removes records where count is zero')
+    parser.add_argument('-i', '--input-file', required=True, nargs=1, help='Input file')
+    parser.add_argument('-o', '--output-file', required=True, nargs=1, help='Output file')
+
+    return parser.parse_args()
+
+
+def set_verbose(verbose):
+    global VERBOSE
+    VERBOSE = verbose
+
+
 def main():
 
-    input_file = sys.argv[1]
+    args = parse_args()
+    set_verbose(args.verbose)
 
     print("""
 --- ITERATION 0 ---
 ---------------------
 ---------------------""")
     # First iteration uses input from file
-    columns, records = parse(input_file)
+    columns, records = parse_input(args.input_file[0], remove_zero_counts=args.remove_zero_counts,
+                             delimiter=args.delimiter)
     n_recs = len(records)
 
     print(f'[INFO] Processing {n_recs} records')
