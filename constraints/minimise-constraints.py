@@ -4,6 +4,10 @@ import copy
 import sys
 import json
 
+
+import mappers
+
+
 VERBOSE = True
 VERBOSE = False
 
@@ -140,8 +144,11 @@ def minimise(columns, records):
 
             if VERBOSE:
                 for con in constraints: 
-                    if ['36'] in con.values():
+                    if con.get('variable') == ['36']: #values():
                         print(f'[DEBUG] Logging presence of variable "36"')
+
+                    if con.get('data_policy_licence') == ['0']:
+                        print(f'[DEBUG] Logging presence of "open" data')
 
             print(f'[INFO] Length: {len(constraints)} for {key_order}')
 
@@ -231,14 +238,14 @@ def decode_records(c):
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-v', '--verbose', type=bool, default=False,
+    parser.add_argument('-v', '--verbose', action='store_true',
                         required=False, help='Verbose mode')
     parser.add_argument('-d', '--delimiter', nargs=1, type=str, default=',',
                         required=False, help='Delimiter')
-    parser.add_argument('-z', '--remove-zero-counts', type=bool, default=True,
+    parser.add_argument('-z', '--remove-zero-counts', action='store_false',
                         required=False, help='Removes records where count is zero')
-    parser.add_argument('-i', '--input-file', required=True, nargs=1, help='Input file')
-    parser.add_argument('-o', '--output-file', required=True, nargs=1, help='Output file')
+    parser.add_argument('-i', '--input-file', required=True, help='Input file')
+    parser.add_argument('-o', '--output-file', required=True, help='Output file')
 
     return parser.parse_args()
 
@@ -258,7 +265,7 @@ def main():
 ---------------------
 ---------------------""")
     # First iteration uses input from file
-    columns, records = parse_input(args.input_file[0], remove_zero_counts=args.remove_zero_counts,
+    columns, records = parse_input(args.input_file, remove_zero_counts=args.remove_zero_counts,
                              delimiter=args.delimiter)
     n_recs = len(records)
 
@@ -287,6 +294,9 @@ def main():
             print(f'\n[INFO] Exiting because lengths are: {len(constraints)} and {len(next_constraints)}')
             break
 
+    print(f'[INFO] Mapping constraints to values required by CDS')
+    constraints = mappers.map_constraints(constraints)
+
     print(f'[INFO] Final constraints:')
     total = 0
     for constr in constraints:
@@ -302,14 +312,46 @@ def main():
     print(f'[INFO] Record count from file: {len(records)}')
     print(f'[INFO] Record count from minimisation: {total}') 
 
-    json_file = 'constraints.json' 
+    json_file = args.output_file
     with open(json_file, 'w') as writer:
         json.dump(constraints, writer, indent=4)
 
     print(f'[INFO] Wrote: {json_file}')
 
 
+TODO = """=========== TO-DO LIST ==============
+
+ 1. Open data (data_policy_licence=0):
+   - for LAND: 
+     - there is NONE!
+
+   - for MARINE:
+     - should all be OPEN.
+
+ 2. data quality: 
+    - db has:
+      - 0: "passed"
+      - 1: "failed"
+    - users request:
+      - "quality_controlled": --> 0
+      - "all_data": --> 0 & 1 & others
+    - SOLUTION: 
+      - At the end of the minimisation of constraints:
+        1. Wherever "data_quality" == ['quality_controlled']
+           - extend to: ['all_data', 'quality_controlled']
+        2. Put this fix in the `mappers.py`
+
+ 3. Make sure the time components are correct for each, Gionata says:
+  {"year":["1900",....], "month": ["01",...],"day": [], "hour":[], "frequency":["monthly"], ....},
+  {"year":["1900",....], "month": ["01",...],, "day": ["01"...], "hour":[], "frequency":["daily"], ....},
+  {"year":["1900",....], "month": ["01",...],, "day": ["01"...], "hour":['00",...], "frequency":["hourly"], ....}, 
+  * TO START WITH, JUST HARD-CODE THESE 
+    * Then see how long it takes to get the counts - using the date_trunc() function in SQL.
+"""
+
+
 if __name__ == '__main__':
 
     main()
+    print(TODO)
 
