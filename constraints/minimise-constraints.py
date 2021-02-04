@@ -321,25 +321,19 @@ def main():
 
 TODO = """=========== TO-DO LIST ==============
 
- 1. Open data (data_policy_licence=0):
+ 1. data_policy_licence:
    - for LAND: 
-     - there is NONE!
-
+     - mixture of licences 
    - for MARINE:
      - should all be OPEN.
+   - [ ] cdm-lens: must return all data if user specifies non-commercial use.
 
- 2. data quality: 
-    - db has:
-      - 0: "passed"
-      - 1: "failed"
-    - users request:
-      - "quality_controlled": --> 0
-      - "all_data": --> 0 & 1 & others
-    - SOLUTION: 
-      - At the end of the minimisation of constraints:
-        1. Wherever "data_quality" == ['quality_controlled']
-           - extend to: ['all_data', 'quality_controlled']
-        2. Put this fix in the `mappers.py`
+ 2. At the end of the minimisation of constraints:
+    i. Wherever "data_quality" == ['quality_controlled']
+       - extend to: ['all_data', 'quality_controlled']
+    ii. We have put this fix in the `mappers.py`
+
+  - [ ] Need to check that "all_data" returns all records in the cdm-lens.
 
  3. Make sure the time components are correct for each, Gionata says:
   {"year":["1900",....], "month": ["01",...],"day": [], "hour":[], "frequency":["monthly"], ....},

@@ -1,6 +1,8 @@
 import sys
 sys.path.append('../../cdm-lens/cdm_interface')
 
+import copy
+
 from wfs_mappings import wfs_mappings
 
 
@@ -11,9 +13,14 @@ name_mappers = {
     'variable': 'variable' 
 }
 
-
 special_cases = {
     'data_quality': (['quality_controlled'], ['all_data', 'quality_controlled'])
+}
+
+DAY_MONTHS = {
+    31: ['01', '03', '05', '07', '08', '10', '12'],
+    30: ['04', '06', '09', '11'],
+    28: ['02']
 }
 
 
@@ -26,7 +33,44 @@ def ftime(seq):
     return [f'{tm:02d}' for tm in seq]
 
 
-def add_time_inputs(d):
+def gather_months_by_length(months, n_days):
+    print(months, n_days, set(DAY_MONTHS[n_days]) & set(months))
+    return list(set(DAY_MONTHS[n_days]) & set(months))
+
+
+def replicate_record_for_months(din, months, n_days):
+    """Returns a replice of dictionary `din` where the 'month' is `months` and 'day' is a list
+    of formatted days from ["01", ... "{n_days}"]
+    """
+    dout = copy.deepcopy(din)
+
+    dout['month'] = months
+    dout['day'] = ftime(range(1, n_days + 1))
+
+    return dout
+
+
+def expand_over_months(din):
+    """Looks up months and then expands one dict into a list of dicts by grouping
+    months of similar length per dict.
+    
+    Returns: list of dictionaries.
+    """
+    months = din['month']
+    new_records = []
+
+    for n_days in sorted(DAY_MONTHS.keys()):
+        picked_months = gather_months_by_length(months, n_days)
+        if not picked_months: continue
+
+        print(picked_months)
+        new_record = replicate_record_for_months(din, picked_months, n_days)
+        new_records.append(new_record)
+
+    return new_records
+
+
+def NOT_USED_add_time_inputs(d):
     """
     This function extends the input dictionary to add more time components:
 
@@ -59,6 +103,14 @@ def add_time_inputs(d):
 
 
 def map_dict(din):
+    """Apply mappers to input dictionary, into output dictionary.
+
+    Args:
+        din ([dict]): input constraints
+
+    Returns:
+        [dict]: output constraints
+    """
     dout = {}
 
     for key, value in din.items():
@@ -83,12 +135,19 @@ def map_dict(din):
 
 
 def map_constraints(cin):
+    """Takes in a list of dictionaries of constraints.
+    For each dictionary:
+     - constraints are mapped
+
+    A new list of dictionaries is returned.
+    """
     cout = []
 
     for din in cin:
         dout = map_dict(din) 
-        add_time_inputs(dout)
-        cout.append(dout)
+#        add_time_inputs(dout)
+        expanded_douts = expand_over_months(dout)
+        cout.extend(expanded_douts)
 
     return cout
 
@@ -96,16 +155,35 @@ def map_constraints(cin):
 
 def test_mappers():
     cin = [{'quality_flag': ['0'], 'report_type': ['3'], 'frequency': ['daily'],
-            'data_policy_licence': ['0'], 'variable': ['44']}]
+            'data_policy_licence': ['0'], 'variable': ['44'], 'month': ['01', '02', '03', '04']}]
     cout = map_constraints(cin)
 
-    print(cout)
-    assert(cout == [{'data_quality': ['all_data', 'quality_controlled'],
+    expected ={'data_quality': ['all_data', 'quality_controlled'],
                      'frequency': ['daily'],
                      'variable': ['accumulated_precipitation'],
-                     'day': ftime(range(1, 32)), 
-                     'hour': ftime([0]), 
-                     'intended_use': ['open']}])
+ #                    'day': ftime(range(1, 32)), 
+ #                    'hour': ftime([0]), 
+                     'intended_use': ['open']}
+
+    exp1 = copy.deepcopy(expected)
+    exp1.update({'month': ['02'], 'day': ftime(range(1, 29))})
+    print(cout[0])
+    print(exp1)
+    assert(cout[0] == exp1)
+
+    exp2 = copy.deepcopy(expected)
+    exp2.update({'month': ['04'], 'day': ftime(range(1, 31))})
+    print(cout[1])
+    print(exp2)
+    assert(cout[1] == exp2)
+
+    exp3 = copy.deepcopy(expected)
+    exp3.update({'month': ['01', '03'], 'day': ftime(range(1, 32))})
+    print(cout[2])
+    print(exp3)
+    assert(cout[2] == exp3)
+
+    print("[SUCCESS] All passed!")
 
 
 if __name__ == '__main__':
