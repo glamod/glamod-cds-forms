@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/usr/local/cdm_lens/src/cdm_lens/cdm_interface')
+sys.path.append('../../cdm-lens/cdm_interface')
 
 from wfs_mappings import wfs_mappings
 
@@ -27,8 +27,16 @@ def ftime(seq):
 
 
 def add_time_inputs(d):
-    # Depending on the frequency setting, add appropriate: "day" and "hour" values
-    # Adjusts dict in place, returns None
+    """
+    This function extends the input dictionary to add more time components:
+
+    Depending on the frequency setting, add appropriate: "day" and "hour" values
+    Adjusts dict in place, returns None
+
+    Following this issue: https://github.com/glamod/glamod-ingest/issues/54
+    - removed "hour" component - no longer added to the dictionary
+
+    """
     one_day = [1]
     one_hour = [0]
 
@@ -39,15 +47,15 @@ def add_time_inputs(d):
 
     if f == 'monthly':
         d['day'] = ftime(one_day)
-        d['hour'] = ftime(one_hour)
+#        d['hour'] = ftime(one_hour)
 
     elif f == 'daily':
         d['day'] = ftime(all_days)
-        d['hour'] = ftime(one_hour)
+#        d['hour'] = ftime(one_hour)
 
     elif f == 'sub_daily':
         d['day'] = ftime(all_days)
-        d['hour'] = ftime(all_hours)
+#        d['hour'] = ftime(all_hours)
 
 
 def map_dict(din):
