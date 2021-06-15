@@ -1,4 +1,5 @@
 from itertools import permutations
+import os
 import argparse
 import copy
 import sys
@@ -34,7 +35,7 @@ def split_line(line, delimiter=','):
     return resp
  
 
-def parse_input(fpath, remove_zero_counts=True, delimiter=','):
+def parse_input(fpath, remove_zero_counts=False, delimiter=','):
 
     with open(fpath) as reader: 
         data = reader.read().strip().split('\n')
@@ -43,7 +44,8 @@ def parse_input(fpath, remove_zero_counts=True, delimiter=','):
 
     columns = split_line(data[0], delimiter)
  
-    if remove_zero_counts: 
+    count_column = -1
+    if remove_zero_counts:
         count_column = columns.index('count')
 
     records = []
@@ -87,17 +89,26 @@ def resort_by_keys(key_order, records):
 
 
 def generate_constraints(key_order, records):
+    """Based on a proposed order of keys (`key_order`), reprocess
+    a set of records to return a list of new constraints.
 
+    Args:
+        key_order (list): a list of keys
+        records (list): a list of records
+
+    Returns:
+        list: a list of constraints
+    """
     recs = resort_by_keys(key_order, records)
     constraints = []
     last_rec = [[] for _ in range(len(key_order))]
-
 
     if VERBOSE:
         print(f'[INFO] Generating constraints for key order: {key_order}')
     else:
         print('.', end='', flush=True)
 
+    # Loop through all records, processing them into new constraints object
     for rec in recs:
 
         extend = True
@@ -135,16 +146,23 @@ def minimise(columns, records):
     best = [-1, len(records), None]
 
     for count, key_order in enumerate(key_perms):
+
+        #start_r = copy.deepcopy(records)
         constraints = generate_constraints(key_order, records)
+        #end_r = copy.deepcopy(records)
+        #assert start_r == end_r
 
         if len(constraints) < best[1]:
             print(f'\n[INFO] Length vs best: {len(constraints)} VS {best[1]}')
 
-            best = [count, len(constraints), constraints[:]]
+            best = [count, len(constraints), copy.deepcopy(constraints[:])]
+            print('HACK HACK HACK: checked length==17238 - does it help?')
+            if best[1] == 17238:
+                break
 
-            if VERBOSE:
+            if VERBOSE and None:
                 for con in constraints: 
-                    if con.get('variable') == ['36']: #values():
+                    if con.get('variable') == ['36']: 
                         print(f'[DEBUG] Logging presence of variable "36"')
 
                     if con.get('data_policy_licence') == ['0']:
@@ -242,7 +260,7 @@ def parse_args():
                         required=False, help='Verbose mode')
     parser.add_argument('-d', '--delimiter', nargs=1, type=str, default=',',
                         required=False, help='Delimiter')
-    parser.add_argument('-z', '--remove-zero-counts', action='store_false',
+    parser.add_argument('-z', '--remove-zero-counts', action='store_true',
                         required=False, help='Removes records where count is zero')
     parser.add_argument('-i', '--input-file', required=True, help='Input file')
     parser.add_argument('-o', '--output-file', required=True, help='Output file')
@@ -254,6 +272,38 @@ def set_verbose(verbose):
     global VERBOSE
     VERBOSE = verbose
 
+
+def _check_variables_not_lost(obj, domain):
+    found_vars = set()
+
+    for rec in obj:
+        item = rec['variable']
+
+        if isinstance(item, str):
+            item = item.strip("[").strip("]").split(',')
+
+        for x in item:
+            y = x.replace('"', '').replace("'", "").replace('_', '')
+
+            if ',' in y:
+                for i in y.split(','):
+                    found_vars.add(i)
+            else:
+                found_vars.add(y)
+
+    if domain == 'land':
+        req_vars = {'36', '44', '45', '53', '55', '57', '58', '85', '106', '107'}
+    elif domain == 'marine':
+        req_vars = {"36", "58", "85", "95", "106", "107"}
+    else:
+        raise Exception('DANGER: No domain found in input file...')
+    
+    print(f'[INFO] Checking variables are not being lost...')
+    if found_vars != req_vars:
+        raise Exception(f'Lost some vars: {found_vars} != {req_vars}')
+    else:
+        print(f'[INFO] All variables are still there!')
+    
 
 def main():
 
@@ -268,6 +318,7 @@ def main():
     columns, records = parse_input(args.input_file, remove_zero_counts=args.remove_zero_counts,
                              delimiter=args.delimiter)
     n_recs = len(records)
+    domain = os.path.basename(args.input_file).split('.')[2]
 
     print(f'[INFO] Processing {n_recs} records')
     constraints = minimise(columns, records)
@@ -286,6 +337,8 @@ def main():
         columns = sorted(encoded[0].keys())
 
         next_constraints = minimise(columns, encoded)
+
+        _check_variables_not_lost(next_constraints, domain)
 
         if len(next_constraints) < len(constraints):
             print(f'\n[INFO] Minimising from {len(constraints)} to {len(next_constraints)}')
@@ -319,33 +372,27 @@ def main():
     print(f'[INFO] Wrote: {json_file}')
 
 
-TODO = """=========== TO-DO LIST ==============
+NOTES = """=========== TO-DO LIST ==============
 
  1. data_policy_licence:
    - for LAND: 
      - mixture of licences 
    - for MARINE:
      - should all be OPEN.
-   - [ ] cdm-lens: must return all data if user specifies non-commercial use.
+
+!!! DOES THE ABOVE NEED ADDRESSING???
 
  2. At the end of the minimisation of constraints:
     i. Wherever "data_quality" == ['quality_controlled']
        - extend to: ['all_data', 'quality_controlled']
     ii. We have put this fix in the `mappers.py`
 
-  - [ ] Need to check that "all_data" returns all records in the cdm-lens.
-
- 3. Make sure the time components are correct for each, Gionata says:
-  {"year":["1900",....], "month": ["01",...],"day": [], "hour":[], "frequency":["monthly"], ....},
-  {"year":["1900",....], "month": ["01",...],, "day": ["01"...], "hour":[], "frequency":["daily"], ....},
-  {"year":["1900",....], "month": ["01",...],, "day": ["01"...], "hour":['00",...], "frequency":["hourly"], ....}, 
-  * TO START WITH, JUST HARD-CODE THESE 
-    * Then see how long it takes to get the counts - using the date_trunc() function in SQL.
+ 3. We ignore "hour" as an option, the user gets all hours.
 """
 
 
 if __name__ == '__main__':
 
     main()
-    print(TODO)
+    print(NOTES)
 

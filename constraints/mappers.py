@@ -13,9 +13,7 @@ name_mappers = {
     'variable': 'variable' 
 }
 
-special_cases = {
-    'data_quality': (['quality_controlled'], ['all_data', 'quality_controlled'])
-}
+#special_cases = { 'data_quality': (['quality_controlled'], ['all_data', 'quality_controlled']) }
 
 DAY_MONTHS = {
     31: ['01', '03', '05', '07', '08', '10', '12'],
@@ -122,14 +120,12 @@ def map_dict(din):
 
         dout[nkey] = value[:]
 
-    print('[INFO] Applying special cases of superset mappings')
-    for key, value in dout.items():
-        for skey in special_cases:
-
-            in_value, out_value = special_cases[skey]
-
-            if key == skey and value == in_value:
-                dout[key] = out_value
+#    print('[INFO] Applying special cases of superset mappings')
+#    for key, value in dout.items():
+#        for skey in special_cases:
+#            in_value, out_value = special_cases[skey]
+#            if key == skey and value == in_value:
+#                dout[key] = out_value
 
     return dout
 
@@ -146,8 +142,9 @@ def map_constraints(cin):
     for din in cin:
         dout = map_dict(din) 
 #        add_time_inputs(dout)
-        expanded_douts = expand_over_months(dout)
-        cout.extend(expanded_douts)
+#        expanded_douts = expand_over_months(dout)
+#        cout.extend(expanded_douts)
+        cout.append(dout)
 
     return cout
 
